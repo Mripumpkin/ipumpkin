@@ -1,6 +1,7 @@
 package commont
 
 import (
+	"ipumpkin/config"
 	"os"
 	"sync"
 
