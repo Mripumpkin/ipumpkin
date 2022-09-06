@@ -59,7 +59,7 @@ func readViperConfig() *viper.Viper {
 
 	// 文件设置支持
 	v.AddConfigPath(".")
-	v.AddConfigPath("/home/projects/fyh/ipumpkin")
+	v.AddConfigPath("../ipumpkin")
 	v.SetConfigName("settings")
 	v.SetConfigType("toml")
 
