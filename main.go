@@ -1,23 +1,28 @@
 package main
 
 import (
+	"ipumpkin/common"
 	"ipumpkin/config"
-	"ipumpkin/handler"
+	"ipumpkin/handlers"
 
 	"github.com/flamego/flamego"
 )
 
 func main() {
-	mongodb := handler.InitDB(config.Config())
+	mongodb := handlers.InitDB(config.Config())
+	cfgProvider := config.LoadConfigProvider()
+	logger := common.NewLogger(cfgProvider)
 	f := flamego.New()
 	// 渲染中间件
+	go handlers.DockerOperate(cfgProvider, mongodb, logger)
 	f.Use(flamego.Renderer())
 	f.Map(mongodb)
+	f.Map(logger)
+	f.Map(cfgProvider)
 	f.Group("/",
 		func() {
-			f.Get("test", handler.Fyhtest)
-			f.Get("testmongo", handler.FyhMongo)
+			f.Get("mongo", handlers.FyhMongo)
 		})
-	f.Run("127.0.0.1", "2630")
+	f.Run(cfgProvider.GetString("server.host"), cfgProvider.GetString("server.port"))
 
 }

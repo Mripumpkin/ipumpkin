@@ -1,0 +1,17 @@
+run_level = "development"
+
+[server]
+    host = "0.0.0.0" # 指定服务器监听地址
+    port = 2835 # 指定服务器
+
+[mongo]
+    host = "192.168.1.3"
+    port = "27017"
+    user = "root"
+    passwd = "root"
+    dbname = "ipumpkin"
+    conn_timeout = 10 # 数据库连接超时时间, 单位 s
+
+[mongodb]
+    docker = "docker"
+

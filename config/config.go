@@ -56,10 +56,10 @@ func readViperConfig() *viper.Viper {
 	// 环境变量设置支持
 	v := viper.New()
 	v.SetEnvPrefix("ipumpkin")
-
+	// fmt.Println(111)
 	// 文件设置支持
 	v.AddConfigPath(".")
-	v.AddConfigPath("../ipumpkin")
+	v.AddConfigPath("/Users/fengyuanhua/Desktop/learn/ipumpkin")
 	v.SetConfigName("settings")
 	v.SetConfigType("toml")
 
@@ -69,7 +69,7 @@ func readViperConfig() *viper.Viper {
 
 	err := v.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s ", err))
+		panic(fmt.Sprintf("Fatal error config file: %s ", err))
 	}
 
 	// global defaults
@@ -82,6 +82,7 @@ func readViperConfig() *viper.Viper {
 		v.SetConfigName("settings.local")
 		v.SetConfigType("toml")
 		v.AddConfigPath(".")
+		v.AddConfigPath("/Users/fengyuanhua/Desktop/learn/ipumpkin")
 		v.MergeInConfig()
 	}
 

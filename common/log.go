@@ -1,10 +1,10 @@
-package commont
+package common
 
 import (
-	"ipumpkin/config"
 	"os"
 	"sync"
 
+	"ipumpkin/config"
 	"github.com/sirupsen/logrus"
 )
 

@@ -1,4 +1,4 @@
-package commont
+package common
 
 import (
 	"io"
