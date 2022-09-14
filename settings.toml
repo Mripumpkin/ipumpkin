@@ -14,3 +14,7 @@ run_level = "development"
 
 [mongodb]
     docker = "docker"
+
+[es]
+    host = "192.168.11.130"
+    posr = "9300"

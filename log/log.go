@@ -1,10 +1,11 @@
-package common
+package log
 
 import (
 	"os"
 	"sync"
 
 	"ipumpkin/config"
+
 	"github.com/sirupsen/logrus"
 )
 
