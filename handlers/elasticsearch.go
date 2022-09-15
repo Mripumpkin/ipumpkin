@@ -23,7 +23,7 @@ type Employee struct {
 }
 
 // 初始化
-func init() {
+func Init() {
 	errorlog := log.New(os.Stdout, "APP", log.LstdFlags)
 	var err error
 	client, err := elastic.NewClient(elastic.SetErrorLog(errorlog), elastic.SetURL(host))
@@ -47,7 +47,7 @@ func init() {
 /*下面是简单的CURD*/
 
 // 创建
-func create(client *elastic.Client) {
+func Create(client *elastic.Client) {
 
 	//使用结构体
 	e1 := Employee{"Jane", "Smith", 32, "I like to collect rock albums", []string{"music"}}
@@ -90,7 +90,7 @@ func create(client *elastic.Client) {
 }
 
 // 删除
-func delete(client *elastic.Client) {
+func Delete(client *elastic.Client) {
 
 	res, err := client.Delete().Index("megacorp").
 		Type("employee").
@@ -104,7 +104,7 @@ func delete(client *elastic.Client) {
 }
 
 // 修改
-func update(client *elastic.Client) {
+func Update(client *elastic.Client) {
 	res, err := client.Update().
 		Index("megacorp").
 		Type("employee").
@@ -119,7 +119,7 @@ func update(client *elastic.Client) {
 }
 
 // 查找
-func gets(client *elastic.Client) {
+func Gets(client *elastic.Client) {
 	//通过id查找
 	get1, err := client.Get().Index("megacorp").Type("employee").Id("2").Do(context.Background())
 	if err != nil {
@@ -131,12 +131,12 @@ func gets(client *elastic.Client) {
 }
 
 // 搜索
-func query(client *elastic.Client) {
+func Query(client *elastic.Client) {
 	var res *elastic.SearchResult
 	var err error
 	//取所有
 	res, err = client.Search("megacorp").Type("employee").Do(context.Background())
-	printEmployee(res, err)
+	PrintEmployee(res, err)
 
 	//字段相等
 	q := elastic.NewQueryStringQuery("last_name:Smith")
@@ -144,7 +144,7 @@ func query(client *elastic.Client) {
 	if err != nil {
 		println(err.Error())
 	}
-	printEmployee(res, err)
+	PrintEmployee(res, err)
 
 	//条件查询
 	//年龄大于30岁的
@@ -152,22 +152,22 @@ func query(client *elastic.Client) {
 	boolQ.Must(elastic.NewMatchQuery("last_name", "smith"))
 	boolQ.Filter(elastic.NewRangeQuery("age").Gt(30))
 	res, err = client.Search("megacorp").Type("employee").Query(q).Do(context.Background())
-	printEmployee(res, err)
+	PrintEmployee(res, err)
 
 	//短语搜索 搜索about字段中有 rock climbing
 	matchPhraseQuery := elastic.NewMatchPhraseQuery("about", "rock climbing")
 	res, err = client.Search("megacorp").Type("employee").Query(matchPhraseQuery).Do(context.Background())
-	printEmployee(res, err)
+	PrintEmployee(res, err)
 
 	//分析 interests
 	aggs := elastic.NewTermsAggregation().Field("interests")
 	res, err = client.Search("megacorp").Type("employee").Aggregation("all_interests", aggs).Do(context.Background())
-	printEmployee(res, err)
+	PrintEmployee(res, err)
 
 }
 
 // 简单分页
-func list(size, page int, client *elastic.Client) {
+func List(size, page int, client *elastic.Client) {
 	if size < 0 || page < 1 {
 		fmt.Printf("param error")
 		return
@@ -177,12 +177,12 @@ func list(size, page int, client *elastic.Client) {
 		Size(size).
 		From((page - 1) * size).
 		Do(context.Background())
-	printEmployee(res, err)
+	PrintEmployee(res, err)
 
 }
 
 // 打印查询到的Employee
-func printEmployee(res *elastic.SearchResult, err error) {
+func PrintEmployee(res *elastic.SearchResult, err error) {
 	if err != nil {
 		print(err.Error())
 		return
