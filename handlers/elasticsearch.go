@@ -7,10 +7,11 @@ import (
 	"os"
 	"reflect"
 
-	"gopkg.in/olivere/elastic.v7" //这里使用的是版本5，最新的是6，有改动
+	"github.com/olivere/elastic"
+	// "gopkg.in/olivere/elastic.v7" //这里使用的是版本5，最新的是6，有改动
 )
 
-var client *elastic.Client
+// var client *elastic.Client
 var host = "http://127.0.0.1:9200/"
 
 type Employee struct {
@@ -21,11 +22,11 @@ type Employee struct {
 	Interests []string `json:"interests"`
 }
 
-//初始化
+// 初始化
 func init() {
 	errorlog := log.New(os.Stdout, "APP", log.LstdFlags)
 	var err error
-	client, err = elastic.NewClient(elastic.SetErrorLog(errorlog), elastic.SetURL(host))
+	client, err := elastic.NewClient(elastic.SetErrorLog(errorlog), elastic.SetURL(host))
 	if err != nil {
 		panic(err)
 	}
@@ -45,8 +46,8 @@ func init() {
 
 /*下面是简单的CURD*/
 
-//创建
-func create() {
+// 创建
+func create(client *elastic.Client) {
 
 	//使用结构体
 	e1 := Employee{"Jane", "Smith", 32, "I like to collect rock albums", []string{"music"}}
@@ -88,8 +89,8 @@ func create() {
 
 }
 
-//删除
-func delete() {
+// 删除
+func delete(client *elastic.Client) {
 
 	res, err := client.Delete().Index("megacorp").
 		Type("employee").
@@ -102,8 +103,8 @@ func delete() {
 	fmt.Printf("delete result %s\n", res.Result)
 }
 
-//修改
-func update() {
+// 修改
+func update(client *elastic.Client) {
 	res, err := client.Update().
 		Index("megacorp").
 		Type("employee").
@@ -117,8 +118,8 @@ func update() {
 
 }
 
-//查找
-func gets() {
+// 查找
+func gets(client *elastic.Client) {
 	//通过id查找
 	get1, err := client.Get().Index("megacorp").Type("employee").Id("2").Do(context.Background())
 	if err != nil {
@@ -129,8 +130,8 @@ func gets() {
 	}
 }
 
-//搜索
-func query() {
+// 搜索
+func query(client *elastic.Client) {
 	var res *elastic.SearchResult
 	var err error
 	//取所有
@@ -165,8 +166,8 @@ func query() {
 
 }
 
-//简单分页
-func list(size, page int) {
+// 简单分页
+func list(size, page int, client *elastic.Client) {
 	if size < 0 || page < 1 {
 		fmt.Printf("param error")
 		return
@@ -180,7 +181,7 @@ func list(size, page int) {
 
 }
 
-//打印查询到的Employee
+// 打印查询到的Employee
 func printEmployee(res *elastic.SearchResult, err error) {
 	if err != nil {
 		print(err.Error())
