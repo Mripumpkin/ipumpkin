@@ -2,9 +2,9 @@ package main
 
 import (
 	"ipumpkin/cmd"
-	"ipumpkin/common"
 	"ipumpkin/config"
 	"ipumpkin/handlers"
+	"ipumpkin/log"
 
 	"github.com/flamego/flamego"
 )
@@ -12,7 +12,7 @@ import (
 func main() {
 	// mongodb := handlers.InitDB(config.Config())
 	cfgProvider := config.LoadConfigProvider()
-	logger := common.NewLogger(cfgProvider)
+	logger := log.NewLogger(cfgProvider)
 	f := flamego.New()
 	// 渲染中间件
 	cmd.Execute()
